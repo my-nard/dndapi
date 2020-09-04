@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace dndHitpointApi.Models {
+    // Some of these could probably be enums but I'm not sure what the tests on your end are gonna be like.
+    // I'd rather be relatively permissive with what I accept and just deal with the stringiness.
     public class CharacterJsonConstants {
         public const string ObjectTypeStats = "stats";
 
@@ -76,11 +78,5 @@ namespace dndHitpointApi.Models {
     public class DealtDamageInformation {
         public int Value { get; set; }
         public string Type { get; set; }
-    }
-
-
-    public class ErrorInformation {
-        public int ErrorCode { get; set; }
-        public string ErrorMessage { get; set; }
     }
 }

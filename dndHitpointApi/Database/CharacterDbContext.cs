@@ -20,10 +20,9 @@ namespace dndHitpointApi.Database {
         public CharacterDbContext(DbContextOptions<CharacterDbContext> options) : base(options) {
         }
 
-        public DbSet<CharacterSchema> Characters {
-            get;
-            set;
-        }
+        public DbSet<CharacterSchema> Characters { get; set; }
+        
+        // Gets a character object from the DB; abstract away the JSON from the controller a bit
         public async Task<Character> GetCharacter(string id) {
             CharacterSchema charJson = await Characters.FindAsync(id);
 
@@ -33,9 +32,16 @@ namespace dndHitpointApi.Database {
             return JsonSerializer.Deserialize<Character>(charJson.CharacterJsonRepresentation);
         }
 
+        // Puts a character into the DB
+        // ID and character.ID are a little redundant, not sure how I feel about that
+        // I figure we might want a char copy function at some point, so maybe it makes sense to
+        // apply the id to the char as we put them, but I'd probably wanna figure out use cases first
         public async Task<ErrorInformation> PutCharacter(string id, Character character) {
-            if (String.IsNullOrEmpty(id)) return makeInvalidParameterError();
-            if (character == null) return makeInvalidParameterError();
+            if (String.IsNullOrEmpty(id)) return ErrorInformation.InvalidParameterError();
+            if (character == null) return ErrorInformation.InvalidParameterError();
+
+            if (id == null) return ErrorInformation.InvalidParameterError();
+            if (!id.Equals(character.Id)) return ErrorInformation.InvalidParameterError();
 
             ErrorInformation result = null;
 
@@ -61,10 +67,7 @@ namespace dndHitpointApi.Database {
             }
             catch (DbUpdateException) {
                 if (CharacterExists(character.Id)) {
-                    result = new ErrorInformation() {
-                        ErrorCode = 2,
-                        ErrorMessage = "Character with this ID already exists."
-                    };
+                    result = ErrorInformation.DuplicateCharacterError();
                 }
                 else {
                     throw;
@@ -74,15 +77,9 @@ namespace dndHitpointApi.Database {
             return result;
         }
 
-        private ErrorInformation makeInvalidParameterError() {
-            return new ErrorInformation() {
-                ErrorCode = 1,
-                ErrorMessage = "Invalid Parameters."
-            };
-        }
-
+        // Check to see if the DB has any chars with the given ID
         public bool CharacterExists(string id) {
-            return this.Characters.Any((CharacterSchema character) => (character.Id == id));
+            return Characters.Any((CharacterSchema character) => (character.Id == id));
         }
     }
 }

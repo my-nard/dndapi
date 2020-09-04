@@ -40,8 +40,10 @@ namespace dndHitpointApi.Controllers {
         ) {
             Character character = await _characterDbContext.GetCharacter(characterId);
 
+            // Heals/TempHP/Damage all return an error and a character, so lets just have 1 response type
             HitpointChangeResponse response = new HitpointChangeResponse();
 
+            // If the caller returns an error, bail out
             response.Error = validationFunction(character);
             if (response.Error != null) {
                 return new JsonResult(response); 
@@ -49,10 +51,12 @@ namespace dndHitpointApi.Controllers {
 
             ErrorInformation dbError = null;
 
+            // Have the caller attempt to apply the HP change
+            // (I suppose this could be any character object change to generalize it further)
             if (hitpointApplicationFunction(character)) {
                 dbError = await _characterDbContext.PutCharacter(character.Id, character);
             }
-             
+            
             if (dbError != null) {
                 response.Error = dbError;
             }
@@ -102,17 +106,11 @@ namespace dndHitpointApi.Controllers {
 
         private ErrorInformation validateHealCharacterRequest(Character character, HealCharacterRequest request) {
             if (character == null) {
-                return new ErrorInformation() {
-                    ErrorCode = 1,
-                    ErrorMessage = "No character found."
-                };
+                return ErrorInformation.InvalidCharacterError();
             }
 
             if (request == null || request.Value < 0) {
-                return new ErrorInformation() {
-                    ErrorCode = 2,
-                    ErrorMessage = "Invalid healing amount"
-                };
+                return ErrorInformation.InvalidParameterError();
             }
             return null;
         }
@@ -158,17 +156,11 @@ namespace dndHitpointApi.Controllers {
 
         private ErrorInformation validateDamageCharacter(Character character, DamageCharacterRequest damageCharacterRequest) {
             if (character == null) {
-                return new ErrorInformation() {
-                    ErrorCode = 1,
-                    ErrorMessage = "No character found."
-                };
+                return ErrorInformation.InvalidCharacterError();
             }
 
             if (damageCharacterRequest.DealtDamage == null || damageCharacterRequest.DealtDamage.Count < 1) {
-                return new ErrorInformation() {
-                    ErrorCode = 2,
-                    ErrorMessage = "No damage to deal."
-                };
+                return ErrorInformation.InvalidParameterError();
             }
 
             return null;

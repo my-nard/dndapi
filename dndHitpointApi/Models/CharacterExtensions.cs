@@ -190,6 +190,9 @@ namespace dndHitpointApi.Models {
             Immune = 2            
         }
 
+        // Applies a single instance of damage to the character
+        // returns true if the damage is successful (including if the char is already at 0)
+        // If we want to keep track of death saves or potential oneshots I'd probably want a damage result return value
         public static bool ApplyDamage(this Character character, DealtDamageInformation damageInformation) {
             if (character == null) return false;
             if (character.HitPoints == null) return false;
@@ -272,7 +275,8 @@ namespace dndHitpointApi.Models {
 
 
 
-        
+        // Gets the character's damage resistances
+        // This is just a map of the damage type ("fire", "force, etc) to an enum (none/resistant/immune)
         public static Dictionary<string, DamageResistance> DamageResistances(this Character character) {
             var resistances = new Dictionary<string, DamageResistance>();
             

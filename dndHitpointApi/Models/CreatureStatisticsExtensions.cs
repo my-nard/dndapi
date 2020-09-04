@@ -1,6 +1,7 @@
 using System;
 
 namespace dndHitpointApi.Models {
+    // I'd rather avoid all the json strings on the server if I can
     public enum Statistics {
         Strength,
         Dexterity,
@@ -10,30 +11,38 @@ namespace dndHitpointApi.Models {
         Charisma
     }
 
+
+    // Convenience extensions for the JSON model for the creature/character stats
     public static class CreatureStatisticsExtensions {
-        public static int Modifier(this CreatureStatistics creatureStatistics, Statistics stat) {
+        // Convenience method for getting the stat 
+        public static int StatisticValue(this CreatureStatistics creatureStatistics, Statistics stat) {
             switch (stat) {
                 case Statistics.Strength: 
-                    return determineStatModifier(creatureStatistics.Strength);
+                    return creatureStatistics.Strength;
 
                 case Statistics.Dexterity: 
-                    return determineStatModifier(creatureStatistics.Dexterity);
+                    return creatureStatistics.Dexterity;
 
                 case Statistics.Constitution: 
-                    return determineStatModifier(creatureStatistics.Constitution);
+                    return creatureStatistics.Constitution;
 
                 case Statistics.Intelligence: 
-                    return determineStatModifier(creatureStatistics.Intelligence);
+                    return creatureStatistics.Intelligence;
 
                 case Statistics.Wisdom: 
-                    return determineStatModifier(creatureStatistics.Wisdom);
+                    return creatureStatistics.Wisdom;
 
                 case Statistics.Charisma: 
-                    return determineStatModifier(creatureStatistics.Charisma);
+                    return creatureStatistics.Charisma;
 
                 default:
                     return 0;
             }
+        }
+
+        // Gets the modifier value ((stat-10)/2, round down) for the given stat block and statistic
+        public static int Modifier(this CreatureStatistics creatureStatistics, Statistics stat) {
+            return determineStatModifier(creatureStatistics.StatisticValue(stat));
         }
 
         private static int determineStatModifier(int statValue) {

@@ -32,10 +32,7 @@ namespace dndHitpointApi.Controllers {
         public async Task<JsonResult> NewCharacter(Character character) {
             if (!validateNewCharacter(character)) {
                 return new JsonResult(new NewCharacterResponse() {
-                    Error = new ErrorInformation() {
-                        ErrorCode = 1,
-                        ErrorMessage = "Invalid character"
-                    }
+                    Error = ErrorInformation.InvalidCharacterError()
                 });
             }
             
