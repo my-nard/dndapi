@@ -845,6 +845,135 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "addtemphpBriv-should fail",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "210c5bca-c9d4-4988-a4da-6653056f99cc",
+						"exec": [
+							"pm.test(\"Temp HP after delete should fail\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([404]);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"value\":10\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/characters/{{characterId}}/addtemphp",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"characters",
+						"{{characterId}}",
+						"addtemphp"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "damageBriv-shouldFail",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "17cd27d3-76c8-40f8-ae53-b4fc945a8c92",
+						"exec": [
+							"pm.test(\"Damage after delete should fail\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([404]);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"dealtDamage\": [\r\n        {\r\n            \"value\": 3,\r\n            \"type\": \"force\"\r\n        },\r\n        {\r\n            \"value\": 3,\r\n            \"type\": \"fire\"\r\n        },\r\n        {\r\n            \"value\": 3,\r\n            \"type\": \"slashing\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/characters/{{characterId}}/damage",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"characters",
+						"{{characterId}}",
+						"damage"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "healBriv-shouldFail",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "8e545b79-860a-4e42-9c8c-d18bb896568e",
+						"exec": [
+							"pm.test(\"Heal after delete should fail\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([404]);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"value\":2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/characters/{{characterId}}/heal",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"characters",
+						"{{characterId}}",
+						"heal"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"protocolProfileBehavior": {}
