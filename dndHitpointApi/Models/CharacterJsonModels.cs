@@ -3,24 +3,11 @@ using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace dndHitpointApi.Models {
-    // Some of these could probably be enums but I'm not sure what the tests on your end are gonna be like.
-    // I'd rather be relatively permissive with what I accept and just deal with the stringiness.
-    public class CharacterJsonConstants {
-        public const string ObjectTypeStats = "stats";
-
-        public const string DefenseResistance = "resistance";
-        public const string DefenseImmunity = "immunity";
-
-        public const string StatStrength = "strength";
-        public const string StatDexterity = "dexterity";
-        public const string StatConstitution = "constitution";
-        public const string StatIntelligence = "intelligence";
-        public const string StatWisdom = "wisdom";
-        public const string StatCharisma = "charisma";
-        
-    }
-    
-
+    // "Root" model class for the Character JSON data
+    // To keep things clearer I've got all the functions for things in extension classes in
+    // separate files. Ultimately I'd probably build separate JSON-Model classes for each
+    // version of the character JSON scheme we'd have and then map those to a full-blown
+    // suite of classes, but this works for now.
     public class Character {
         public String Id { get; set; }
         public String Name { get; set; }
@@ -36,7 +23,7 @@ namespace dndHitpointApi.Models {
 
         public CreatureHitPoints HitPoints { get; set; }
     }
-
+    
     public class CreatureHitPoints {
         public int Maximum { get; set; }
         public int Current { get; set; }
@@ -78,5 +65,22 @@ namespace dndHitpointApi.Models {
     public class DealtDamageInformation {
         public int Value { get; set; }
         public string Type { get; set; }
+    }
+
+
+    // Some of these could probably be enums but I'm not sure what the tests on your end are gonna be like.
+    // I'd rather be relatively permissive with what I accept and just deal with the stringiness.
+    public class CharacterJsonConstants {
+        public const string ObjectTypeStats = "stats";
+
+        public const string DefenseResistance = "resistance";
+        public const string DefenseImmunity = "immunity";
+
+        public const string StatStrength = "strength";
+        public const string StatDexterity = "dexterity";
+        public const string StatConstitution = "constitution";
+        public const string StatIntelligence = "intelligence";
+        public const string StatWisdom = "wisdom";
+        public const string StatCharisma = "charisma";
     }
 }

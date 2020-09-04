@@ -14,7 +14,7 @@ namespace dndHitpointApi.Models {
 
     // Convenience extensions for the JSON model for the creature/character stats
     public static class CreatureStatisticsExtensions {
-        // Convenience method for getting the stat 
+        // Convenience method for getting the stat
         public static int StatisticValue(this CreatureStatistics creatureStatistics, Statistics stat) {
             switch (stat) {
                 case Statistics.Strength: 

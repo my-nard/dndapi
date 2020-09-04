@@ -1,4 +1,7 @@
 namespace dndHitpointApi.Models {
+    // I wind up using this on a lot of the responses, so I figured pulling it out
+    // made a lot of sense. We could probably extend this with warnings or an error
+    // array if we needed to.
     public class ErrorInformation {
         public int ErrorCode { get; set; }
         public string ErrorMessage { get; set; }
