@@ -8,7 +8,7 @@ docker run -d -p <whatever port you like>:80 --name <somename> dndapi
 
 Alternatively you can just run the dndHitpointApi project; the development port's set to 5000.
 
-There's a suite of simple integration tests I wrote for Postman: see DNDBeyondTest.postman_collection.json - you should be able to import it and run it.
+There's a suite of simple integration tests I wrote for Postman: see DNDBeyondTest.postman_collection.json - you should be able to import it and run it. Its requests are pointing at port 5000, so if you're running this in docker you might need to swap ports.
 
 New character service
 ```
