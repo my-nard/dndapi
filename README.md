@@ -27,7 +27,7 @@ The character object will be manipulated a bit:
 - a hitpoint property will be calculated and added
 ```
 
-Get character JSON
+Get character
 ```
 GET:    /characters/{id}
 
@@ -43,7 +43,7 @@ Response:
 The character JSON or a 404
 ```
 
-Healing/TempHP:
+Healing/TempHP
 ```
 POST: /characters/{id}/heal
 POST: /characters/{id}/addtemphp
@@ -60,7 +60,7 @@ Example:
 
 Response:
 {
-    "error": null,
+    "error": null or an error like {  errorCode:int, errorMessage:string },
     "character": { updated char object } 
 }
 ```
@@ -104,7 +104,7 @@ For example:
 
 Response:
 {
-    "error": null,
+    "error": null or an error like {  errorCode:int, errorMessage:string },
     "character": { updated char object } 
 }
 ```
