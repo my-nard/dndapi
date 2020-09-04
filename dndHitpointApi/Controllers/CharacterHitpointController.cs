@@ -33,12 +33,16 @@ namespace dndHitpointApi.Controllers {
         //     Return false if there aren't changes made (and it won't save)
         // Returns a JSON result for a HitpointChangeResponse - basically either an error if
         // there's an error or the updated Character.
-        private async Task<JsonResult> GeneralHitpointService(
+        private async Task<IActionResult> GeneralHitpointService(
             string characterId,
             Func<Character, ErrorInformation> validationFunction,
             Func<Character, bool> hitpointApplicationFunction
         ) {
             Character character = await _characterDbContext.GetCharacter(characterId);
+
+            if (character == null) {
+                return NotFound();
+            }
 
             // Heals/TempHP/Damage all return an error and a character, so lets just have 1 response type
             HitpointChangeResponse response = new HitpointChangeResponse();
@@ -84,7 +88,7 @@ namespace dndHitpointApi.Controllers {
         // Post body JSON: { "value": newTempHpValue }
         // Returns: HitpointChangeResponse as JSON (updated character will be in the response)
         [HttpPost("{id}/addtemphp")]
-        public async Task<JsonResult> GrantTempHpToCharacter(string id, HealCharacterRequest healCharacterRequest) {
+        public async Task<IActionResult> GrantTempHpToCharacter(string id, HealCharacterRequest healCharacterRequest) {
             return await GeneralHitpointService(
                 id,
                 (character) => validateHealCharacterRequest(character, healCharacterRequest),
@@ -96,7 +100,7 @@ namespace dndHitpointApi.Controllers {
         // Post body JSON: { "value": healAmount }
         // Returns: HitpointChangeResponse as JSON (updated character will be in the response)
         [HttpPost("{id}/heal")]
-        public async Task<JsonResult> HealCharacter(string id, HealCharacterRequest healCharacterRequest) {
+        public async Task<IActionResult> HealCharacter(string id, HealCharacterRequest healCharacterRequest) {
             return await GeneralHitpointService(
                 id,
                 (character) => validateHealCharacterRequest(character, healCharacterRequest),
@@ -128,7 +132,7 @@ namespace dndHitpointApi.Controllers {
         //
         // Returns: HitpointChangeResponse as JSON (updated character will be in the response)
         [HttpPost("{id}/damage")]
-        public async Task<JsonResult> DamageCharacter(string id, DamageCharacterRequest damageCharacterRequest) {
+        public async Task<IActionResult> DamageCharacter(string id, DamageCharacterRequest damageCharacterRequest) {
             return await GeneralHitpointService(
                 id,
                 character => validateDamageCharacter(character, damageCharacterRequest),
