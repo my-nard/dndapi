@@ -1,0 +1,772 @@
+{
+	"info": {
+		"_postman_id": "14a4180a-09eb-43d2-b825-e8f85847f16c",
+		"name": "DNDBeyondTest",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "newChar-Briv",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9bdd6106-007e-422a-a5e0-a2b5e9e85914",
+						"exec": [
+							"var newCharResult = JSON.parse(responseBody);\r",
+							"\r",
+							"if (!newCharResult.error\r",
+							"    && newCharResult.character\r",
+							"    && newCharResult.character.id)\r",
+							"{\r",
+							"    pm.test(\"Expect a character id\", function() {\r",
+							"        pm.expect(newCharResult.character.id).not.equal(null);\r",
+							"        pm.expect(newCharResult.character.id).not.equal(undefined);\r",
+							"    });\r",
+							"    postman.setEnvironmentVariable(\"characterId\", newCharResult.character.id);\r",
+							"\r",
+							"    pm.test(\"Expect 45 HP\", function () {\r",
+							"        pm.expect(newCharResult.character.hitPoints.current).to.eql(45);\r",
+							"        pm.expect(newCharResult.character.hitPoints.current).to.eql(newCharResult.character.hitPoints.maximum);\r",
+							"    });\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "9c2aed30-7390-43a9-a71c-f4488838e9f2",
+						"exec": [
+							"postman.setEnvironmentVariable(\"characterId\", \"\");"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Briv\",\r\n  \"level\": 5,\r\n  \"classes\": [\r\n    {\r\n    \"name\":\"fighter\",\r\n    \"hitDiceValue\":10,\r\n    \"classLevel\":3\r\n    },\r\n    {\r\n      \"name\":\"wizard\",\r\n      \"hitdicevalue\":6,\r\n      \"classLevel\":2\r\n    }\r\n  ],\r\n  \"stats\":{\r\n    \"strength\":15,\r\n    \"dexterity\":12,\r\n    \"constitution\":14,\r\n    \"intelligence\":13,\r\n    \"wisdom\":10,\r\n    \"charisma\":8\r\n  },\r\n  \"items\":[\r\n    {\r\n      \"name\":\"Ioun Stone of Fortitude\",\r\n      \"modifier\":{\r\n        \"affectedObject\":\"stats\",\r\n        \"affectedValue\":\"constitution\",\r\n        \"value\":2\r\n      }\r\n    }\r\n  ],\r\n  \"defenses\":[\r\n    {\r\n      \"type\":\"fire\",\r\n      \"defense\":\"immunity\"\r\n    },\r\n    {\r\n      \"type\":\"slashing\",\r\n      \"defense\":\"resistance\"\r\n    }\r\n  ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/characters/new/",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"characters",
+						"new",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "damageBriv-2force",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e90049c2-3e7a-4f67-bb71-129903bd75eb",
+						"exec": [
+							"var newCharResult = JSON.parse(responseBody);\r",
+							"\r",
+							"if (!newCharResult.error\r",
+							"    && newCharResult.character\r",
+							"    && newCharResult.character.id)\r",
+							"{\r",
+							"    pm.test(\"Expect 43 HP\", function () {\r",
+							"        pm.expect(newCharResult.character.hitPoints.current).to.eql(43);\r",
+							"    });\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"dealtDamage\": [\r\n        {\r\n            \"value\": 2,\r\n            \"type\": \"force\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/characters/{{characterId}}/damage",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"characters",
+						"{{characterId}}",
+						"damage"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "damageBriv-2fire",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "44308d64-bdfb-400a-ac0a-9e00961defee",
+						"exec": [
+							"var newCharResult = JSON.parse(responseBody);\r",
+							"\r",
+							"if (!newCharResult.error\r",
+							"    && newCharResult.character\r",
+							"    && newCharResult.character.id)\r",
+							"{\r",
+							"    pm.test(\"Expect 43 HP - immune to fire\", function () {\r",
+							"        pm.expect(newCharResult.character.hitPoints.current).to.eql(43);\r",
+							"    });\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"dealtDamage\": [\r\n        {\r\n            \"value\": 2,\r\n            \"type\": \"fire\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/characters/{{characterId}}/damage",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"characters",
+						"{{characterId}}",
+						"damage"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "damageBriv-2slashing",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "07e1c2e7-60ed-4eed-964c-3396b86a3444",
+						"exec": [
+							"var newCharResult = JSON.parse(responseBody);\r",
+							"\r",
+							"if (!newCharResult.error\r",
+							"    && newCharResult.character\r",
+							"    && newCharResult.character.id)\r",
+							"{\r",
+							"    pm.test(\"Expect 42 HP - resistant to slashing\", function () {\r",
+							"        pm.expect(newCharResult.character.hitPoints.current).to.eql(42);\r",
+							"    });\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"dealtDamage\": [\r\n        {\r\n            \"value\": 2,\r\n            \"type\": \"slashing\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/characters/{{characterId}}/damage",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"characters",
+						"{{characterId}}",
+						"damage"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "damageBriv-3force3fire3slashing",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "30793d18-e592-468b-a1c2-4b418c294508",
+						"exec": [
+							"var newCharResult = JSON.parse(responseBody);\r",
+							"\r",
+							"if (!newCharResult.error\r",
+							"    && newCharResult.character\r",
+							"    && newCharResult.character.id)\r",
+							"{\r",
+							"    pm.test(\"Expect 38 HP - 3force+0fire+1slash\", function () {\r",
+							"        pm.expect(newCharResult.character.hitPoints.current).to.eql(38);\r",
+							"    });\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"dealtDamage\": [\r\n        {\r\n            \"value\": 3,\r\n            \"type\": \"force\"\r\n        },\r\n        {\r\n            \"value\": 3,\r\n            \"type\": \"fire\"\r\n        },\r\n        {\r\n            \"value\": 3,\r\n            \"type\": \"slashing\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/characters/{{characterId}}/damage",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"characters",
+						"{{characterId}}",
+						"damage"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getBriv",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e5eee2ec-c447-4463-bd13-358f91a9a0cc",
+						"exec": [
+							"var character = JSON.parse(responseBody);\r",
+							"\r",
+							"if (character && character.id)\r",
+							"{\r",
+							"    pm.test(\"Expect 39 hp from previous tests\", function () {\r",
+							"        pm.expect(newCharResult.character.hitPoints.current).to.eql(39);\r",
+							"    });\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/characters/{{characterId}}",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"characters",
+						"{{characterId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addtemphpBriv-10",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b8dba391-4330-40c5-ac3c-62c806094bde",
+						"exec": [
+							"var newCharResult = JSON.parse(responseBody);\r",
+							"\r",
+							"if (!newCharResult.error\r",
+							"    && newCharResult.character\r",
+							"    && newCharResult.character.id)\r",
+							"{\r",
+							"    pm.test(\"Expect 10 temp HP\", function () {\r",
+							"        pm.expect(newCharResult.character.hitPoints.temporary).to.eql(10);\r",
+							"    });\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"value\":10\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/characters/{{characterId}}/addtemphp",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"characters",
+						"{{characterId}}",
+						"addtemphp"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addtemphpBriv-5",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "2a51318b-4985-49ae-a8fc-225e5d469bc3",
+						"exec": [
+							"var newCharResult = JSON.parse(responseBody);\r",
+							"\r",
+							"if (!newCharResult.error\r",
+							"    && newCharResult.character\r",
+							"    && newCharResult.character.id)\r",
+							"{\r",
+							"    pm.test(\"Expect 10 temp HP\", function () {\r",
+							"        pm.expect(newCharResult.character.hitPoints.temporary).to.eql(10);\r",
+							"    });\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"value\":5\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/characters/{{characterId}}/addtemphp",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"characters",
+						"{{characterId}}",
+						"addtemphp"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addtemphpBriv-15",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "eccd8d7a-bad0-49af-afe6-8de13e808a40",
+						"exec": [
+							"var newCharResult = JSON.parse(responseBody);\r",
+							"\r",
+							"if (!newCharResult.error\r",
+							"    && newCharResult.character\r",
+							"    && newCharResult.character.id)\r",
+							"{\r",
+							"    pm.test(\"Expect 15 temp HP\", function () {\r",
+							"        pm.expect(newCharResult.character.hitPoints.temporary).to.eql(15);\r",
+							"    });\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"value\":15\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/characters/{{characterId}}/addtemphp",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"characters",
+						"{{characterId}}",
+						"addtemphp"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "damageBriv-Temp3force3fire3slashing",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f72332be-9c90-43ab-9138-6844563fad9b",
+						"exec": [
+							"var newCharResult = JSON.parse(responseBody);\r",
+							"\r",
+							"if (!newCharResult.error\r",
+							"    && newCharResult.character\r",
+							"    && newCharResult.character.id)\r",
+							"{\r",
+							"    pm.test(\"Expect 38 HP + 11 temp\", function () {\r",
+							"        pm.expect(newCharResult.character.hitPoints.current).to.eql(38);\r",
+							"        pm.expect(newCharResult.character.hitPoints.temporary).to.eql(11);\r",
+							"    });\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"dealtDamage\": [\r\n        {\r\n            \"value\": 3,\r\n            \"type\": \"force\"\r\n        },\r\n        {\r\n            \"value\": 3,\r\n            \"type\": \"fire\"\r\n        },\r\n        {\r\n            \"value\": 3,\r\n            \"type\": \"slashing\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/characters/{{characterId}}/damage",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"characters",
+						"{{characterId}}",
+						"damage"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "healBriv-2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "fe32c4d3-e8cf-4aab-adb4-5b69dd877b57",
+						"exec": [
+							"var newCharResult = JSON.parse(responseBody);\r",
+							"\r",
+							"if (!newCharResult.error\r",
+							"    && newCharResult.character\r",
+							"    && newCharResult.character.id)\r",
+							"{\r",
+							"    pm.test(\"Expect 40 HP + 11 temp\", function () {\r",
+							"        pm.expect(newCharResult.character.hitPoints.current).to.eql(40);\r",
+							"        pm.expect(newCharResult.character.hitPoints.temporary).to.eql(11);\r",
+							"    });\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"value\":2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/characters/{{characterId}}/heal",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"characters",
+						"{{characterId}}",
+						"heal"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "healBriv-20",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0e2579ce-46aa-4ee6-936a-daf77769f5e6",
+						"exec": [
+							"var newCharResult = JSON.parse(responseBody);\r",
+							"\r",
+							"if (!newCharResult.error\r",
+							"    && newCharResult.character\r",
+							"    && newCharResult.character.id)\r",
+							"{\r",
+							"    pm.test(\"Expect 45 HP + 11 temp\", function () {\r",
+							"        pm.expect(newCharResult.character.hitPoints.current).to.eql(45);\r",
+							"        pm.expect(newCharResult.character.hitPoints.temporary).to.eql(11);\r",
+							"    });\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"value\":20\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/characters/{{characterId}}/heal",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"characters",
+						"{{characterId}}",
+						"heal"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "damageBriv-FullHp3force3fire3slashing",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ea30cddd-d5cf-4d9f-8ebd-3a2594b4b8e0",
+						"exec": [
+							"var newCharResult = JSON.parse(responseBody);\r",
+							"\r",
+							"if (!newCharResult.error\r",
+							"    && newCharResult.character\r",
+							"    && newCharResult.character.id)\r",
+							"{\r",
+							"    pm.test(\"Expect 45 HP + 7 temp\", function () {\r",
+							"        pm.expect(newCharResult.character.hitPoints.current).to.eql(45);\r",
+							"        pm.expect(newCharResult.character.hitPoints.temporary).to.eql(7);\r",
+							"    });\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"dealtDamage\": [\r\n        {\r\n            \"value\": 3,\r\n            \"type\": \"force\"\r\n        },\r\n        {\r\n            \"value\": 3,\r\n            \"type\": \"fire\"\r\n        },\r\n        {\r\n            \"value\": 3,\r\n            \"type\": \"slashing\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/characters/{{characterId}}/damage",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"characters",
+						"{{characterId}}",
+						"damage"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "damageBriv-FullHp7Temp-30force",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "409f3064-a364-4f0b-975c-b956f86151be",
+						"exec": [
+							"var newCharResult = JSON.parse(responseBody);\r",
+							"\r",
+							"if (!newCharResult.error\r",
+							"    && newCharResult.character\r",
+							"    && newCharResult.character.id)\r",
+							"{\r",
+							"    pm.test(\"Expect 22 HP + 0 temp\", function () {\r",
+							"        pm.expect(newCharResult.character.hitPoints.current).to.eql(22);\r",
+							"        pm.expect(newCharResult.character.hitPoints.temporary).to.eql(0);\r",
+							"    });\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"dealtDamage\": [\r\n        {\r\n            \"value\": 30,\r\n            \"type\": \"force\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/characters/{{characterId}}/damage",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"characters",
+						"{{characterId}}",
+						"damage"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "damageBriv-22Hp-25force",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "2f592bfd-d2c4-432e-9aa8-f08d5f144879",
+						"exec": [
+							"var newCharResult = JSON.parse(responseBody);\r",
+							"\r",
+							"if (!newCharResult.error\r",
+							"    && newCharResult.character\r",
+							"    && newCharResult.character.id)\r",
+							"{\r",
+							"    pm.test(\"Expect 0 HP + 0 temp\", function () {\r",
+							"        pm.expect(newCharResult.character.hitPoints.current).to.eql(0);\r",
+							"        pm.expect(newCharResult.character.hitPoints.temporary).to.eql(0);\r",
+							"    });\r",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"dealtDamage\": [\r\n        {\r\n            \"value\": 25,\r\n            \"type\": \"force\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/characters/{{characterId}}/damage",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"characters",
+						"{{characterId}}",
+						"damage"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
