@@ -766,6 +766,85 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "deleteBriv",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ed55747d-48f1-4403-848e-e206915ae7d8",
+						"exec": [
+							"var newCharResult = JSON.parse(responseBody);\r",
+							"pm.test(\"Delete returns the character\", function () {\r",
+							"    pm.expect(newCharResult.id).not.equal(null);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/characters/delete/{{characterId}}",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"characters",
+						"delete",
+						"{{characterId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getBriv-shouldFail",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0eb83197-261c-4ea6-ba84-a5c8afc00670",
+						"exec": [
+							"pm.test(\"Get briv after he's been deleted should fail\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.oneOf([404]);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/characters/{{characterId}}",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"characters",
+						"{{characterId}}"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"protocolProfileBehavior": {}
